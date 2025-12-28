@@ -4,19 +4,27 @@
 ## Run
 
 ### Server
+#### ENV
+```
+CREATE_ACCOUNT_DELAY: Delay for create a account (default: 1000) (ms)
+CREATE_ADDRESS_DELAY: Delay for create a address (default: 1000) (ms)
+ON_ERROR_DELAY: Delay for sleep on error (default: 5000) (ms)
+ADDRESS_AMOUNT: Maximum amount of create address in account (50)
+MUST_LEGIT_TO_AMOUNT: No skipping address creation by error (default: 0) (0: false, 1: true)
+PROXY: Network proxy for instaddr api (recommend use oxylabs)
+```
+
 ```docker compose up --build bin-gen-server```
 
 ### Client
-#### Args
+#### ENV
 ```
--d: local database file path
--s: custom server address (default: localhost:8080)
--acc: maximum account amount to get (default: 1)
--addr: minimum amount of addresses in account (default: 0)
+DATABASE: Local database file path
+SERVER_URL: Custom server address (default: http://localhost:8080)
+AMOUNT_ACCOUNT: Account amount to get (default: 100)
+MIN_AMOUNT_ADDRESS: Minimum amount of addresses in account (default: 10)
 ```
 
 ```
-cd client
-go build
-./client -acc 100 -addr 10
+docker compose up --build bin-gen-client
 ```

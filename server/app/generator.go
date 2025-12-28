@@ -39,7 +39,7 @@ func StartGenerator(db *sql.DB) {
 		onErrorDelay = errDelayParsed
 		log.Printf("ON_ERROR_DELAY: %d\n", errDelayParsed)
 	}
-	addrAmountParsed, err := strconv.Atoi(os.Getenv("ADDRESS_AMOUNT"))
+	addrAmountParsed, err := strconv.Atoi(os.Getenv("AMOUNT_ADDRESS"))
 	if err == nil {
 		addressAmount = addrAmountParsed
 		log.Printf("ADDRESS_AMOUNT: %d\n", addrAmountParsed)
@@ -50,10 +50,12 @@ func StartGenerator(db *sql.DB) {
 		log.Printf("MUST_LEGIT_TO_AMOUNT: %v\n", mustLegitParsed == 1)
 	}
 	proxyEnv := os.Getenv("PROXY")
-	proxyURLParsed, err := url.Parse(proxyEnv)
-	if err == nil {
-		proxy = proxyURLParsed
-		log.Printf("PROXY: %s\n", proxyEnv)
+	if proxyEnv != "" {
+		proxyURLParsed, err := url.Parse(proxyEnv)
+		if err == nil {
+			proxy = proxyURLParsed
+			log.Printf("PROXY: %s\n", proxyEnv)
+		}
 	}
 
 	for {
@@ -82,15 +84,12 @@ func StartGenerator(db *sql.DB) {
 			}
 		}
 
-		tried := 0
-		created := 0
+		tried := 1
+		created := 1
 		resultStr := ""
 		for {
 			resultStr = fmt.Sprintf("[Tried :%d, Created :%d]", tried, created)
-			if tried == addressAmount && !mustLegitToAmount {
-				break
-			}
-			if created == addressAmount {
+			if (tried >= addressAmount && !mustLegitToAmount) || created >= addressAmount {
 				break
 			}
 			if domains != nil && len(domains) > 0 {

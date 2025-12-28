@@ -7,6 +7,7 @@ COPY client ./client
 COPY common ./common
 COPY server ./server
 
+RUN apk add --no-cache git sqlite-dev gcc musl-dev
 RUN cd client && go mod download
 
 WORKDIR /app/client
