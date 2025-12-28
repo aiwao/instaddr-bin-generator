@@ -17,9 +17,9 @@ RUN go build -o server
 FROM alpine
 RUN apk update && apk upgrade
 RUN mkdir /app
-WORKDIR /app
+WORKDIR /app/server
 
 COPY --from=builder /app/server ./server
 COPY /server/addrbin.db ./server/addrbin.db
 
-CMD ["./server/server"]
+CMD ["./server"]
