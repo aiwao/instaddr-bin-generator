@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"log"
 	"math/rand/v2"
+	"net/http"
+	"net/url"
 	"os"
 	"strconv"
 	"time"
@@ -19,31 +21,47 @@ var createAddressDelay = 1000
 var onErrorDelay = 5000
 var addressAmount = 50
 var mustLegitToAmount = false
+var proxy *url.URL
 
 func StartGenerator(db *sql.DB) {
-	accDelayParse, err := strconv.Atoi(os.Getenv("CREATE_ACCOUNT_DELAY"))
+	accDelayParsed, err := strconv.Atoi(os.Getenv("CREATE_ACCOUNT_DELAY"))
 	if err == nil {
-		createAccountDelay = accDelayParse
+		createAccountDelay = accDelayParsed
 	}
-	addrDelayParse, err := strconv.Atoi(os.Getenv("CREATE_ADDRESS_DELAY"))
+	addrDelayParsed, err := strconv.Atoi(os.Getenv("CREATE_ADDRESS_DELAY"))
 	if err == nil {
-		createAddressDelay = addrDelayParse
+		createAddressDelay = addrDelayParsed
 	}
-	errDelayParse, err := strconv.Atoi(os.Getenv("ON_ERROR_DELAY"))
+	errDelayParsed, err := strconv.Atoi(os.Getenv("ON_ERROR_DELAY"))
 	if err == nil {
-		onErrorDelay = errDelayParse
+		onErrorDelay = errDelayParsed
 	}
-	addrAmountParse, err := strconv.Atoi(os.Getenv("ADDRESS_AMOUNT"))
+	addrAmountParsed, err := strconv.Atoi(os.Getenv("ADDRESS_AMOUNT"))
 	if err == nil {
-		addressAmount = addrAmountParse
+		addressAmount = addrAmountParsed
 	}
-	mustLegitParse, err := strconv.Atoi(os.Getenv("MUST_LEGIT_TO_AMOUNT"))
+	mustLegitParsed, err := strconv.Atoi(os.Getenv("MUST_LEGIT_TO_AMOUNT"))
 	if err == nil {
-		mustLegitToAmount = mustLegitParse == 1
+		mustLegitToAmount = mustLegitParsed == 1
+	}
+	proxyEnv := os.Getenv("PROXY")
+	proxyURLParsed, err := url.Parse(proxyEnv)
+	if err == nil {
+		proxy = proxyURLParsed
 	}
 
 	for {
-		acc, err := instaddr.NewAccount(instaddr.Options{})
+		client := &http.Client{}
+		if proxy != nil {
+			client.Transport = &http.Transport{
+				Proxy: http.ProxyURL(proxy),
+			}
+		}
+		option := instaddr.Options{
+			Client: client,
+		}
+		
+		acc, err := instaddr.NewAccount(option)
 		if err != nil {
 			log.Printf("%s%v%s\n", common.Red, err, common.Reset)
 			time.Sleep(time.Duration(onErrorDelay) * time.Millisecond)
@@ -52,7 +70,7 @@ func StartGenerator(db *sql.DB) {
 
 		domain := "mail4.uk"
 		if domains == nil || len(domains) == 0 {
-			domains, err = acc.GetMailDomains(instaddr.Options{})
+			domains, err = acc.GetMailDomains(option)
 			if err != nil {
 				log.Printf("%s%v%s\n", common.Red, err, common.Reset)
 			}
@@ -73,7 +91,8 @@ func StartGenerator(db *sql.DB) {
 				domain = domains[rand.IntN(len(domains))]
 			}
 			mailAcc, err := acc.CreateAddressWithDomainAndName(instaddr.OptionsWithName{
-				Name: random(),
+				Name:    random(),
+				Options: option,
 			}, domain)
 			tried++
 			if err != nil {
@@ -86,7 +105,7 @@ func StartGenerator(db *sql.DB) {
 			created++
 		}
 		log.Printf("%s%s%s\n", common.Blue, resultStr, common.Reset)
-		info, err := acc.GetAuthInfo(instaddr.Options{})
+		info, err := acc.GetAuthInfo(option)
 		if err != nil {
 			log.Printf("%s%v%s\n", common.Red, err, common.Reset)
 		} else {
