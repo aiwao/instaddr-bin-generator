@@ -46,7 +46,7 @@ func StartGenerator(db *sql.DB) {
 		if err != nil {
 			log.Println(err)
 			log.Println("Retry in 5 seconds")
-			time.Sleep(time.Duration(onErrorDelay))
+			time.Sleep(time.Duration(onErrorDelay) * time.Millisecond)
 			continue
 		}
 
@@ -78,11 +78,11 @@ func StartGenerator(db *sql.DB) {
 			tried++
 			if err != nil {
 				log.Printf("%s %v¥n", resultStr, err)
-				time.Sleep(time.Duration(onErrorDelay))
+				time.Sleep(time.Duration(onErrorDelay) * time.Millisecond)
 				continue
 			}
 			log.Printf("%s %s¥n", resultStr, mailAcc.Address)
-			time.Sleep(time.Duration(createAddressDelay))
+			time.Sleep(time.Duration(createAddressDelay) * time.Millisecond)
 			created++
 		}
 		log.Printf(resultStr)
@@ -98,7 +98,7 @@ func StartGenerator(db *sql.DB) {
 				log.Println(err)
 			}
 		}
-		time.Sleep(time.Duration(createAccountDelay))
+		time.Sleep(time.Duration(createAccountDelay) * time.Millisecond)
 	}
 }
 
