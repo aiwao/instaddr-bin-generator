@@ -27,27 +27,33 @@ func StartGenerator(db *sql.DB) {
 	accDelayParsed, err := strconv.Atoi(os.Getenv("CREATE_ACCOUNT_DELAY"))
 	if err == nil {
 		createAccountDelay = accDelayParsed
+		log.Printf("CREATE_ACCOUNT_DELAY: %d\n", accDelayParsed)
 	}
 	addrDelayParsed, err := strconv.Atoi(os.Getenv("CREATE_ADDRESS_DELAY"))
 	if err == nil {
 		createAddressDelay = addrDelayParsed
+		log.Printf("CCREATE_ADDRESS_DELAY: %d\n", addrDelayParsed)
 	}
 	errDelayParsed, err := strconv.Atoi(os.Getenv("ON_ERROR_DELAY"))
 	if err == nil {
 		onErrorDelay = errDelayParsed
+		log.Printf("ON_ERROR_DELAY: %d\n", errDelayParsed)
 	}
 	addrAmountParsed, err := strconv.Atoi(os.Getenv("ADDRESS_AMOUNT"))
 	if err == nil {
 		addressAmount = addrAmountParsed
+		log.Printf("ADDRESS_AMOUNT: %d\n", addrAmountParsed)
 	}
 	mustLegitParsed, err := strconv.Atoi(os.Getenv("MUST_LEGIT_TO_AMOUNT"))
 	if err == nil {
 		mustLegitToAmount = mustLegitParsed == 1
+		log.Printf("MUST_LEGIT_TO_AMOUNT: %v\n", mustLegitParsed == 1)
 	}
 	proxyEnv := os.Getenv("PROXY")
 	proxyURLParsed, err := url.Parse(proxyEnv)
 	if err == nil {
 		proxy = proxyURLParsed
+		log.Printf("PROXY: %s\n", proxyEnv)
 	}
 
 	for {
@@ -60,7 +66,7 @@ func StartGenerator(db *sql.DB) {
 		option := instaddr.Options{
 			Client: client,
 		}
-		
+
 		acc, err := instaddr.NewAccount(option)
 		if err != nil {
 			log.Printf("%s%v%s\n", common.Red, err, common.Reset)
