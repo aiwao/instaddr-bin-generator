@@ -25,7 +25,9 @@ func StartAPI(db *sql.DB) {
 			defer r.Body.Close()
 
 			rows, err := db.Query(
-				"SELECT * FROM accounts ORDER BY created_at DESC LIMIT ?",
+				"SELECT * FROM accounts WHERE amount >= ? ORDER BY created_at DESC LIMIT ?",
+				parsedBody.MinAddressAmount,
+				parsedBody.AccountAmount,
 			)
 			if err != nil {
 				http.Error(w, "internal server error", http.StatusInternalServerError)

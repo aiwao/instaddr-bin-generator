@@ -24,12 +24,7 @@ func main() {
 		return
 	}
 
-	req, err := http.NewRequest("POST", "http://localhost:8080", bytes.NewBuffer(jsonBytes))
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	res, err := http.DefaultClient.Do(req)
+	res, err := http.Post("http://localhost:8080", "application/json", bytes.NewBuffer(jsonBytes))
 	if err != nil {
 		fmt.Println(err)
 		return
