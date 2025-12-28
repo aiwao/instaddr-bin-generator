@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	db, err := sql.Open("sqlite3", "./addrbin.db")
+	db, err := sql.Open("sqlite3", "../addrbin.db")
 	if err != nil {
 		log.Fatalln(err)
 	}

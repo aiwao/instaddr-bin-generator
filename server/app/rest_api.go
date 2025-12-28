@@ -24,7 +24,7 @@ func StartAPI(db *sql.DB) {
 			}
 			defer r.Body.Close()
 
-			accounts, err := common.GetAccountsFromDatabase(db)
+			accounts, err := common.GetAccountsFromDatabase(db, parsedBody)
 			if err != nil {
 				http.Error(w, "internal server error", http.StatusInternalServerError)
 				return

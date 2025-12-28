@@ -2,7 +2,7 @@ services:
   bin-gen-server:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: ./server/Dockerfile
     image: bin-gen
     environment:
       CREATE_ACCOUNT_DELAY: 1000
@@ -15,3 +15,10 @@ services:
      - "8080:8080"
     volumes:
       - ./server/addrbin.db:/app/server/addrbin.db
+  bin-gen-client:
+    build:
+      context: .
+      dockerfile: ./client/Dockerfile
+    image: bin-gen
+    volumes:
+      - ./server/addrbin.db:/app/client/addrbin.db

@@ -3,23 +3,20 @@ FROM golang:1.25.5-alpine3.23 AS builder
 WORKDIR /app
 
 COPY go.work ./
+COPY client ./client
 COPY server ./server
 COPY common ./common
-COPY client ./client
 
-RUN cd server && go mod download
 RUN apk add --no-cache git sqlite-dev gcc musl-dev
+RUN cd server && go mod download
 
-COPY . .
 WORKDIR /app/server
 RUN go build -o server
 
 FROM alpine
-RUN apk update && apk upgrade
-RUN mkdir /app
+RUN apk add --no-cache sqlite-libs
 WORKDIR /app/server
 
 COPY --from=builder /app/server/server ./server
-COPY /server/addrbin.db ./addrbin.db
 
 CMD ["./server"]
