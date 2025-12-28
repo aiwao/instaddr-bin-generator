@@ -47,8 +47,8 @@ func main() {
 		return
 	}
 
-	fmt.Printf("Got %d Accounts", responseJSON.AccountAmount)
+	fmt.Printf("Got %d Accounts¥n", responseJSON.AccountAmount)
 	for _, acc := range responseJSON.Accounts {
-		fmt.Printf("[%d Addresses] %s:%s¥n", acc.AddressAmount, acc.ID, acc.Password)
+		fmt.Printf("%s:%s (%d Addresses)¥n", acc.ID, acc.Password, acc.AddressAmount)
 	}
 }
