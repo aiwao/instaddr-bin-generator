@@ -1,54 +1,44 @@
 package main
 
 import (
-	"bytes"
-	"client/utility"
-	"encoding/json"
-	"fmt"
-	"io"
-	"net/http"
-
+	"client/api"
 	"common"
+	"flag"
+	"fmt"
+
+	_ "github.com/mattn/go-sqlite3"
 )
 
 func main() {
-	accountAmount := utility.ScanInt("Maximum account amount to get")
-	minAddressAmount := utility.ScanInt("Minimum amount of addresses of account")
-	payload := common.RequestJSON{
-		AccountAmount:    accountAmount,
-		MinAddressAmount: minAddressAmount,
+	var dbPath string
+	var serverURL string
+	flag.StringVar(&dbPath, "d", "", "database file path")
+	flag.StringVar(&serverURL, "s", "http://localhost:8080", "server address")
+	var accountAmount int
+	flag.IntVar(&accountAmount, "acc", 1, "maximum account amount to get")
+	var minAddressAmount int
+	flag.IntVar(&minAddressAmount, "addr", 0, "minimum amount of addresses in account")
+	flag.Parse()
+	
+	payload := api.ClientRequestJSON{
+		DBPath:    dbPath,
+		ServerURL: serverURL,
+		RequestJSON: common.RequestJSON{
+			AccountAmount:    accountAmount,
+			MinAddressAmount: minAddressAmount,
+		},
 	}
-	jsonBytes, err := json.Marshal(&payload)
+	res, err := api.RequestDatabase(payload)
 	if err != nil {
 		fmt.Printf("%s%v%s\n", common.Red, err, common.Reset)
 		return
 	}
 
-	res, err := http.Post("http://localhost:8080", "application/json", bytes.NewBuffer(jsonBytes))
-	if err != nil {
-		fmt.Printf("%s%v%s\n", common.Red, err, common.Reset)
-		return
-	}
-	defer res.Body.Close()
-	resBytes, err := io.ReadAll(res.Body)
-	if err != nil {
-		fmt.Printf("%s%v%s\n", common.Red, err, common.Reset)
-		return
-	}
-
-	if res.StatusCode != http.StatusOK {
-		fmt.Printf("%s%d %s%s\n", common.Red, res.StatusCode, string(resBytes), common.Reset)
-		return
-	}
-
-	var responseJSON common.ResponseJSON
-	if err := json.Unmarshal(resBytes, &responseJSON); err != nil {
-		fmt.Printf("%s%v%s\n", common.Red, err, common.Reset)
-		return
-	}
-
-	fmt.Printf("Got %d Accounts\n", responseJSON.AccountAmount)
-	for _, acc := range responseJSON.Accounts {
+	fmt.Printf("%sGot%s %s%d%s%s Accounts%s\n", common.Blue, common.Reset, common.Green, res.AccountAmount, common.Reset, common.Blue, common.Reset)
+	totalAddresses := 0
+	for _, acc := range res.Accounts {
 		fmt.Printf("%s%s%s:%s%s%s %s(%d Addresses)%s\n", common.Blue, acc.ID, common.Reset, common.Blue, acc.Password, common.Reset, common.Green, acc.AddressAmount, common.Reset)
+		totalAddresses += acc.AddressAmount
 	}
+	fmt.Printf("%sTotal addresses:%s %s%d%s\n", common.Blue, common.Reset, common.Green, totalAddresses, common.Reset)
 }

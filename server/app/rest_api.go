@@ -24,25 +24,10 @@ func StartAPI(db *sql.DB) {
 			}
 			defer r.Body.Close()
 
-			rows, err := db.Query(
-				"SELECT * FROM accounts WHERE amount >= ? ORDER BY created_at DESC LIMIT ?",
-				parsedBody.MinAddressAmount,
-				parsedBody.AccountAmount,
-			)
+			accounts, err := common.GetAccountsFromDatabase(db)
 			if err != nil {
 				http.Error(w, "internal server error", http.StatusInternalServerError)
 				return
-			}
-			defer rows.Close()
-
-			accounts := []common.Account{}
-			for rows.Next() {
-				var account common.Account
-				if err := rows.Scan(&account.ID, &account.Password, &account.AddressAmount, &account.CreatedAt); err != nil {
-					http.Error(w, "internal server error", http.StatusInternalServerError)
-					return
-				}
-				accounts = append(accounts, account)
 			}
 
 			responseJSON := common.ResponseJSON{
