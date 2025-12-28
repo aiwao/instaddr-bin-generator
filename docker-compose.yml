@@ -10,5 +10,7 @@ services:
       ON_ERROR_DELAY: 5000
       ADDRESS_AMOUNT: 50
       MUST_LEGIT_TO_AMOUNT: 0
-    ports: 
+    ports:
      - "8080:8080"
+    volumes:
+      - ./server/addrbin.db:/app/server/addrbin.db
