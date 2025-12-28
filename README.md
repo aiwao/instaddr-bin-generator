@@ -14,8 +14,11 @@ MUST_LEGIT_TO_AMOUNT: No skipping address creation by error (default: 0) (0: fal
 PROXY: Network proxy for instaddr api (recommend use oxylabs)
 ```
 
-```
+```shell
 docker compose up --build bin-gen-server
+
+#.env.local
+docker compose --env-file .env.local up --build bin-gen-server
 ```
 
 ### Client
@@ -29,4 +32,7 @@ MIN_AMOUNT_ADDRESS: Minimum amount of addresses in account (default: 10)
 
 ```
 docker compose up --build bin-gen-client
+
+#.env.local
+docker compose --env-file .env.local up --build bin-gen-client
 ```
