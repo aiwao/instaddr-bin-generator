@@ -7,4 +7,4 @@
 ```docker compose up --build bin-gen-server```
 
 ### Client
-```cd client && go build && ./client```
+```cd client && go build -o client && ./client```
