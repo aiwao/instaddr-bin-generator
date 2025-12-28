@@ -19,7 +19,7 @@ RUN apk update && apk upgrade
 RUN mkdir /app
 WORKDIR /app/server
 
-COPY --from=builder /app/server ./server
-COPY /server/addrbin.db ./server/addrbin.db
+COPY --from=builder /app/server/server ./server
+COPY /server/addrbin.db ./addrbin.db
 
 CMD ["./server"]
