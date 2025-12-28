@@ -1,3 +1,3 @@
-module bin-gen-client
+module client
 
 go 1.25.5

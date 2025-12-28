@@ -1,9 +1,9 @@
 package main
 
 import (
-	"bin-gen-server/app"
 	"database/sql"
 	"log"
+	"server/app"
 
 	_ "github.com/mattn/go-sqlite3"
 )

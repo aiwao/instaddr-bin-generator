@@ -1,8 +1,8 @@
 package main
 
 import (
-	"bin-gen-client/utility"
 	"bytes"
+	"client/utility"
 	"encoding/json"
 	"fmt"
 	"io"
