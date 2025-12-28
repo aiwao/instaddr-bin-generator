@@ -12,14 +12,14 @@ import (
 func main() {
 	var dbPath string
 	var serverURL string
-	flag.StringVar(&dbPath, "d", "", "database file path")
-	flag.StringVar(&serverURL, "s", "http://localhost:8080", "server address")
+	flag.StringVar(&dbPath, "d", "", "local database file path")
+	flag.StringVar(&serverURL, "s", "http://localhost:8080", "custom server address (default: localhost:8080)")
 	var accountAmount int
 	flag.IntVar(&accountAmount, "acc", 1, "maximum account amount to get")
 	var minAddressAmount int
 	flag.IntVar(&minAddressAmount, "addr", 0, "minimum amount of addresses in account")
 	flag.Parse()
-	
+
 	payload := api.ClientRequestJSON{
 		DBPath:    dbPath,
 		ServerURL: serverURL,
