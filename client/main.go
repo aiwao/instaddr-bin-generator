@@ -37,7 +37,7 @@ func main() {
 	}
 
 	if res.StatusCode != http.StatusOK {
-		fmt.Printf("%d %s¥n", res.StatusCode, string(resBytes))
+		fmt.Printf("%d %s\n", res.StatusCode, string(resBytes))
 		return
 	}
 
@@ -47,8 +47,8 @@ func main() {
 		return
 	}
 
-	fmt.Printf("Got %d Accounts¥n", responseJSON.AccountAmount)
+	fmt.Printf("Got %d Accounts\n", responseJSON.AccountAmount)
 	for _, acc := range responseJSON.Accounts {
-		fmt.Printf("%s:%s (%d Addresses)¥n", acc.ID, acc.Password, acc.AddressAmount)
+		fmt.Printf("%s:%s (%d Addresses)\n", acc.ID, acc.Password, acc.AddressAmount)
 	}
 }

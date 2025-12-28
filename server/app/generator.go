@@ -77,11 +77,11 @@ func StartGenerator(db *sql.DB) {
 			}, domain)
 			tried++
 			if err != nil {
-				log.Printf("%s %v¥n", resultStr, err)
+				log.Printf("%s %v\n", resultStr, err)
 				time.Sleep(time.Duration(onErrorDelay) * time.Millisecond)
 				continue
 			}
-			log.Printf("%s %s¥n", resultStr, mailAcc.Address)
+			log.Printf("%s %s\n", resultStr, mailAcc.Address)
 			time.Sleep(time.Duration(createAddressDelay) * time.Millisecond)
 			created++
 		}
