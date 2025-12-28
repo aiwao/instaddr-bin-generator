@@ -8,19 +8,22 @@ import (
 	"strconv"
 )
 
+var local = false
 var accountAmount = 100
 var minAddressAmount = 10
 
 func main() {
-	dbPath := os.Getenv("DATABASE")
-	if dbPath != "" {
-		log.Println("Database file path: " + dbPath)
-	}
-	serverURL := os.Getenv("SERVER_URL")
-	if serverURL == "" {
-		serverURL = "http://localhost:8080"
-	} else {
-		log.Println("Server URL: " + serverURL)
+	local = os.Getenv("LOCAL") == "1"
+	log.Printf("Local: %v\n", local)
+	var serverURL string
+	if !local {
+		serverURLEnv := os.Getenv("SERVER_URL")
+		if serverURLEnv == "" {
+			serverURL = "http://localhost:8080"
+		} else {
+			serverURL = serverURLEnv
+			log.Println("Server URL: " + serverURLEnv)
+		}
 	}
 	accAmParsed, err := strconv.Atoi(os.Getenv("AMOUNT_ACCOUNT"))
 	if err == nil {
@@ -34,7 +37,7 @@ func main() {
 	}
 
 	payload := api.ClientRequestJSON{
-		DBPath:    dbPath,
+		Local:     local,
 		ServerURL: serverURL,
 		RequestJSON: common.RequestJSON{
 			AccountAmount:    accountAmount,

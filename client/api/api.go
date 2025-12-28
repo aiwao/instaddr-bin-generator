@@ -12,14 +12,14 @@ import (
 )
 
 type ClientRequestJSON struct {
-	DBPath    string
+	Local     bool
 	ServerURL string
 	common.RequestJSON
 }
 
 func RequestDatabase(payload ClientRequestJSON) (common.ResponseJSON, error) {
-	if payload.DBPath != "" {
-		db, err := sql.Open("sqlite3", payload.DBPath)
+	if payload.Local {
+		db, err := sql.Open("sqlite3", "./addrbin.db")
 		if err != nil {
 			return common.ResponseJSON{}, err
 		}

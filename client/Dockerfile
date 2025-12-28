@@ -14,7 +14,9 @@ WORKDIR /app/client
 RUN go build -o client
 
 FROM alpine
+RUN apk add --no-cache sqlite-libs
 WORKDIR /app/client
+
 COPY --from=builder /app/client/client ./client
 
 CMD ["./client"]

@@ -44,11 +44,8 @@ func StartGenerator(db *sql.DB) {
 		addressAmount = addrAmountParsed
 		log.Printf("ADDRESS_AMOUNT: %d\n", addrAmountParsed)
 	}
-	mustLegitParsed, err := strconv.Atoi(os.Getenv("MUST_LEGIT_TO_AMOUNT"))
-	if err == nil {
-		mustLegitToAmount = mustLegitParsed == 1
-		log.Printf("MUST_LEGIT_TO_AMOUNT: %v\n", mustLegitParsed == 1)
-	}
+	mustLegitToAmount = os.Getenv("MUST_LEGIT_TO_AMOUNT") == "1"
+	log.Printf("MUST_LEGIT_TO_AMOUNT: %v\n", mustLegitToAmount)
 	proxyEnv := os.Getenv("PROXY")
 	if proxyEnv != "" {
 		proxyURLParsed, err := url.Parse(proxyEnv)

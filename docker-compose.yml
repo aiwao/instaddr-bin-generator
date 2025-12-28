@@ -5,12 +5,12 @@ services:
       dockerfile: ./server/Dockerfile
     image: bin-gen
     environment:
-      CREATE_ACCOUNT_DELAY: 1000
-      CREATE_ADDRESS_DELAY: 1000
-      ON_ERROR_DELAY: 5000
-      AMOUNT_ADDRESS: 50
-      MUST_LEGIT_TO_AMOUNT: 0
-      PROXY:
+      CREATE_ACCOUNT_DELAY: ${CREATE_ACCOUNT_DELAY}
+      CREATE_ADDRESS_DELAY: ${CREATE_ADDRESS_DELAY}
+      ON_ERROR_DELAY: ${ON_ERROR_DELAY}
+      AMOUNT_ADDRESS: ${AMOUNT_ADDRESS}
+      MUST_LEGIT_TO_AMOUNT: ${MUST_LEGIT_TO_AMOUNT}
+      PROXY: ${PROXY}
     ports:
      - "8080:8080"
     volumes:
@@ -20,10 +20,10 @@ services:
       context: .
       dockerfile: ./client/Dockerfile
     image: bin-gen
+    environment:
+      LOCAL: ${LOCAL}
+      SERVER_URL: ${SERVER_URL}
+      AMOUNT_ACCOUNT: ${AMOUNT_ACCOUNT}
+      MIN_AMOUNT_ADDRESS: ${MIN_AMOUNT_ADDRESS}
     volumes:
       - ./addrbin.db:/app/client/addrbin.db
-    environment:
-      DATABASE:
-      SERVER_URL: http://localhost:8080
-      AMOUNT_ACCOUNT: 100
-      MIN_AMOUNT_ADDRESS: 10

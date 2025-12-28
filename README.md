@@ -14,12 +14,14 @@ MUST_LEGIT_TO_AMOUNT: No skipping address creation by error (default: 0) (0: fal
 PROXY: Network proxy for instaddr api (recommend use oxylabs)
 ```
 
-```docker compose up --build bin-gen-server```
+```
+docker compose up --build bin-gen-server
+```
 
 ### Client
 #### ENV
 ```
-DATABASE: Local database file path
+Local: Use local database (default: 0) (true/false)
 SERVER_URL: Custom server address (default: http://localhost:8080)
 AMOUNT_ACCOUNT: Account amount to get (default: 100)
 MIN_AMOUNT_ADDRESS: Minimum amount of addresses in account (default: 10)
