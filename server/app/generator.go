@@ -1,6 +1,7 @@
 package app
 
 import (
+	"common"
 	"database/sql"
 	"fmt"
 	"log"
@@ -44,8 +45,7 @@ func StartGenerator(db *sql.DB) {
 	for {
 		acc, err := instaddr.NewAccount(instaddr.Options{})
 		if err != nil {
-			log.Println(err)
-			log.Println("Retry in 5 seconds")
+			log.Printf("%s%v%s\n", common.Red, err, common.Reset)
 			time.Sleep(time.Duration(onErrorDelay) * time.Millisecond)
 			continue
 		}
@@ -54,7 +54,7 @@ func StartGenerator(db *sql.DB) {
 		if domains == nil || len(domains) == 0 {
 			domains, err = acc.GetMailDomains(instaddr.Options{})
 			if err != nil {
-				log.Println(err)
+				log.Printf("%s%v%s\n", common.Red, err, common.Reset)
 			}
 		}
 
@@ -77,25 +77,25 @@ func StartGenerator(db *sql.DB) {
 			}, domain)
 			tried++
 			if err != nil {
-				log.Printf("%s %v\n", resultStr, err)
+				log.Printf("%s%s %v%s\n", common.Red, resultStr, err, common.Reset)
 				time.Sleep(time.Duration(onErrorDelay) * time.Millisecond)
 				continue
 			}
-			log.Printf("%s %s\n", resultStr, mailAcc.Address)
+			log.Printf("%s%s%s %s%s%s\n", common.Green, resultStr, common.Reset, common.Blue, mailAcc.Address, common.Reset)
 			time.Sleep(time.Duration(createAddressDelay) * time.Millisecond)
 			created++
 		}
-		log.Printf(resultStr)
+		log.Printf("%s%s%s\n", common.Blue, resultStr, common.Reset)
 		info, err := acc.GetAuthInfo(instaddr.Options{})
 		if err != nil {
-			log.Println(err)
+			log.Printf("%s%v%s\n", common.Red, err, common.Reset)
 		} else {
 			_, err := db.Exec(
 				"INSERT INTO accounts(id, password, amount) VALUES (?, ?, ?)",
 				info.AccountID, info.Password, created,
 			)
 			if err != nil {
-				log.Println(err)
+				log.Printf("%s%v%s\n", common.Red, err, common.Reset)
 			}
 		}
 		time.Sleep(time.Duration(createAccountDelay) * time.Millisecond)

@@ -30,7 +30,6 @@ func StartAPI(db *sql.DB) {
 				parsedBody.AccountAmount,
 			)
 			if err != nil {
-				log.Printf("A: %v", err)
 				http.Error(w, "internal server error", http.StatusInternalServerError)
 				return
 			}
@@ -40,7 +39,6 @@ func StartAPI(db *sql.DB) {
 			for rows.Next() {
 				var account common.Account
 				if err := rows.Scan(&account.ID, &account.Password, &account.AddressAmount, &account.CreatedAt); err != nil {
-					log.Printf("B: %v", err)
 					http.Error(w, "internal server error", http.StatusInternalServerError)
 					return
 				}
@@ -53,7 +51,6 @@ func StartAPI(db *sql.DB) {
 			}
 			b, err := json.Marshal(&responseJSON)
 			if err != nil {
-				log.Printf("C: %v", err)
 				http.Error(w, "internal server error", http.StatusInternalServerError)
 				return
 			}

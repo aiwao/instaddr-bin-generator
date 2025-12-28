@@ -12,7 +12,7 @@ import (
 )
 
 func main() {
-	accountAmount := utility.ScanInt("Account amount to get")
+	accountAmount := utility.ScanInt("Maximum account amount to get")
 	minAddressAmount := utility.ScanInt("Minimum amount of addresses of account")
 	payload := common.RequestJSON{
 		AccountAmount:    accountAmount,
@@ -49,6 +49,6 @@ func main() {
 
 	fmt.Printf("Got %d Accounts\n", responseJSON.AccountAmount)
 	for _, acc := range responseJSON.Accounts {
-		fmt.Printf("%s%s:%s%s %s(%d Addresses)%s\n", common.Blue, acc.ID, acc.Password, common.Reset, common.Green, acc.AddressAmount, common.Reset)
+		fmt.Printf("%s%s%s:%s%s%s %s(%d Addresses)%s\n", common.Blue, acc.ID, common.Reset, common.Blue, acc.Password, common.Reset, common.Green, acc.AddressAmount, common.Reset)
 	}
 }
