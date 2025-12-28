@@ -1,6 +1,8 @@
 services:
   bin-gen-server:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     image: bin-gen
     environment:
       CREATE_ACCOUNT_DELAY: 1000
