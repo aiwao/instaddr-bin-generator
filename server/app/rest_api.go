@@ -48,8 +48,8 @@ func StartAPI(db *sql.DB) {
 				AccountAmount: len(accounts),
 				Accounts:      accounts,
 			}
-			var b []byte
-			if err := json.Unmarshal(b, &responseJSON); err != nil {
+			b, err := json.Marshal(&responseJSON)
+			if err != nil {
 				http.Error(w, "internal server error", http.StatusInternalServerError)
 				return
 			}
