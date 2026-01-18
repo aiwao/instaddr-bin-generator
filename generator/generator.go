@@ -1,9 +1,9 @@
-package app
+package generator
 
 import (
-	"utility.
 	"database/sql"
 	"fmt"
+	"instaddr_bin/utility"
 	"log"
 	"math/rand/v2"
 	"net/http"
@@ -23,7 +23,7 @@ var addressAmount = 50
 var mustLegitToAmount = false
 var proxy *url.URL
 
-func StartGenerator(db *sql.DB) {
+func Start(db *sql.DB) {
 	accDelayParsed, err := strconv.Atoi(os.Getenv("CREATE_ACCOUNT_DELAY"))
 	if err == nil {
 		createAccountDelay = accDelayParsed
