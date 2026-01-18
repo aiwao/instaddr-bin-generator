@@ -1,8 +1,24 @@
 services:
-  bin-gen-server:
-    build:
-      context: .
-      dockerfile: ./server/Dockerfile
+  db:
+    image: postgres:16.11-alpine3.23
+    container_name: accounts-postgres
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: accountdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d accountdb"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+  app:
+    build: .
     image: bin-gen
     environment:
       CREATE_ACCOUNT_DELAY: ${CREATE_ACCOUNT_DELAY}
@@ -11,19 +27,6 @@ services:
       AMOUNT_ADDRESS: ${AMOUNT_ADDRESS}
       MUST_LEGIT_TO_AMOUNT: ${MUST_LEGIT_TO_AMOUNT}
       PROXY: ${PROXY}
-    ports:
-     - "8080:8080"
-    volumes:
-      - ./addrbin.db:/app/server/addrbin.db
-  bin-gen-client:
-    build:
-      context: .
-      dockerfile: ./client/Dockerfile
-    image: bin-gen
-    environment:
-      LOCAL: ${LOCAL}
-      SERVER_URL: ${SERVER_URL}
-      AMOUNT_ACCOUNT: ${AMOUNT_ACCOUNT}
-      MIN_AMOUNT_ADDRESS: ${MIN_AMOUNT_ADDRESS}
-    volumes:
-      - ./addrbin.db:/app/client/addrbin.db
+
+volumes:
+  postgres_data:
