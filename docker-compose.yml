@@ -19,14 +19,21 @@ services:
       timeout: 10s
   app:
     build: .
-    image: bin-gen
     environment:
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_USER: ${DB_USER}
+      DB_PASS: ${DB_PASS}
+      DB_NAME: ${DB_NAME}
       CREATE_ACCOUNT_DELAY: ${CREATE_ACCOUNT_DELAY}
       CREATE_ADDRESS_DELAY: ${CREATE_ADDRESS_DELAY}
       ON_ERROR_DELAY: ${ON_ERROR_DELAY}
       AMOUNT_ADDRESS: ${AMOUNT_ADDRESS}
       MUST_LEGIT_TO_AMOUNT: ${MUST_LEGIT_TO_AMOUNT}
       PROXY: ${PROXY}
+    depends_on:
+      db:
+        condition: service_healthy
 
 volumes:
   postgres_data:
