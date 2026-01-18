@@ -1,10 +1,7 @@
 # instaddr-bin-generator
 ## Instaddr Account generator/database with Docker + Go + SQLite3
 
-## Run
-
-### Server
-#### ENV
+## ENV
 ```
 CREATE_ACCOUNT_DELAY: Delay for create a account (default: 1000) (ms)
 CREATE_ADDRESS_DELAY: Delay for create a address (default: 1000) (ms)
@@ -14,25 +11,17 @@ MUST_LEGIT_TO_AMOUNT: No skipping address creation by error (default: 0) (0: fal
 PROXY: Network proxy for instaddr api (recommend use oxylabs)
 ```
 
+## RUN
 ```shell
-docker compose up --build bin-gen-server
-
-#.env.local
-docker compose --env-file .env.local up --build bin-gen-server
+docker compose --env-file .env.local up app
 ```
 
-### Client
-#### ENV
-```
-Local: Use local database (default: 0) (true/false)
-SERVER_URL: Custom server address (default: http://localhost:8080)
-AMOUNT_ACCOUNT: Account amount to get (default: 100)
-MIN_AMOUNT_ADDRESS: Minimum amount of addresses in account (default: 10)
+## Connect to the database (example)
+```shell
+psql --host localhost --port 5432 --username user --password password --dbname accountdb
 ```
 
-```
-docker compose up --build bin-gen-client
-
-#.env.local
-docker compose --env-file .env.local up --build bin-gen-client
+## Get accounts data as json array
+```shell
+psql --host localhost --port 5432 --username user --password password --dbname accountdb -t -A -c "SELECT json_agg(row_to_json(t)) FROM (SELECT * FROM accounts) t;" > accounts.json
 ```
