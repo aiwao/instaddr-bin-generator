@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"instaddr_bin/generator"
 	"log"
 	"os"
 
@@ -22,4 +23,6 @@ func main() {
 		log.Fatalln(err)
 	}
 	defer db.Close()
+
+	generator.Start(db)
 }
