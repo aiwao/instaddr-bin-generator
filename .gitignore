@@ -93,3 +93,5 @@ fabric.properties
 
 client/client
 .DS_Store
+
+.env.local
