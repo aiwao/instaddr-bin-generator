@@ -112,7 +112,7 @@ func Start(db *sql.DB) {
 			log.Printf("%s%v%s\n", utility.Red, err, utility.Reset)
 		} else {
 			_, err := db.Exec(
-				"INSERT INTO accounts(id, password, amount) VALUES (?, ?, ?)",
+				"INSERT INTO accounts(id, password, amount) VALUES ($1, $2, $3)",
 				info.AccountID, info.Password, created,
 			)
 			if err != nil {
