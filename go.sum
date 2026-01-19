@@ -1,5 +1,3 @@
-github.com/aiwao/envar v1.0.0 h1:zlNMdyEcj7/Zyu9fBWRz5SzvwJB8BxN08v+byW1YNz8=
-github.com/aiwao/envar v1.0.0/go.mod h1:pf+rjGtd9+ojHWwHmVp1Ig867DrAAkvuTn0uxhvvZEQ=
 github.com/aiwao/envar v1.0.1 h1:U+kEP8KW44yUpZQLnSd9LDERdRVnPVNw7zq4CvCJvcY=
 github.com/aiwao/envar v1.0.1/go.mod h1:pf+rjGtd9+ojHWwHmVp1Ig867DrAAkvuTn0uxhvvZEQ=
 github.com/aiwao/instaddr_api v1.0.6 h1:t0gTX1BJfBje2pqrv6Z62t9C+RBEXk44HbCfbJF5ypg=
