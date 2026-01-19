@@ -8,6 +8,7 @@ require (
 )
 
 require (
+	github.com/aiwao/envar v1.0.1 // indirect
 	github.com/antchfx/htmlquery v1.3.5 // indirect
 	github.com/antchfx/xpath v1.3.5 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect

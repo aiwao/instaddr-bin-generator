@@ -7,7 +7,7 @@ CREATE_ACCOUNT_DELAY: Delay for create a account (default: 1000) (ms)
 CREATE_ADDRESS_DELAY: Delay for create a address (default: 1000) (ms)
 ON_ERROR_DELAY: Delay for sleep on error (default: 5000) (ms)
 ADDRESS_AMOUNT: Maximum amount of create address in account (50)
-MUST_LEGIT_TO_AMOUNT: No skipping address creation by error (default: 0) (0: false, 1: true)
+MUST_LEGIT_TO_AMOUNT: No skipping address creation by error (default: true)
 PROXY: Network proxy for instaddr api (recommend use oxylabs)
 ```
 

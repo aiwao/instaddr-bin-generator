@@ -8,10 +8,9 @@ import (
 	"math/rand/v2"
 	"net/http"
 	"net/url"
-	"os"
-	"strconv"
 	"time"
 
+	"github.com/aiwao/envar"
 	instaddr "github.com/aiwao/instaddr_api"
 )
 
@@ -20,40 +19,22 @@ var createAccountDelay = 1000
 var createAddressDelay = 1000
 var onErrorDelay = 5000
 var addressAmount = 50
-var mustLegitToAmount = false
+var mustLegitToAmount = true
 var proxy *url.URL
 
 func Start(db *sql.DB) {
-	accDelayParsed, err := strconv.Atoi(os.Getenv("CREATE_ACCOUNT_DELAY"))
-	if err == nil {
-		createAccountDelay = accDelayParsed
-		log.Printf("CREATE_ACCOUNT_DELAY: %d\n", accDelayParsed)
-	}
-	addrDelayParsed, err := strconv.Atoi(os.Getenv("CREATE_ADDRESS_DELAY"))
-	if err == nil {
-		createAddressDelay = addrDelayParsed
-		log.Printf("CCREATE_ADDRESS_DELAY: %d\n", addrDelayParsed)
-	}
-	errDelayParsed, err := strconv.Atoi(os.Getenv("ON_ERROR_DELAY"))
-	if err == nil {
-		onErrorDelay = errDelayParsed
-		log.Printf("ON_ERROR_DELAY: %d\n", errDelayParsed)
-	}
-	addrAmountParsed, err := strconv.Atoi(os.Getenv("AMOUNT_ADDRESS"))
-	if err == nil {
-		addressAmount = addrAmountParsed
-		log.Printf("ADDRESS_AMOUNT: %d\n", addrAmountParsed)
-	}
-	mustLegitToAmount = os.Getenv("MUST_LEGIT_TO_AMOUNT") == "1"
+	envar.GetIntv("CREATE_ACCOUNT_DELAY", &createAccountDelay)
+	envar.GetIntv("CREATE_ADDRESS_DELAY", &createAddressDelay)
+	envar.GetIntv("ON_ERROR_DELAY", &onErrorDelay)
+	envar.GetIntv("ADDRESS_AMOUNT", &addressAmount)
+	envar.GetBoolv("MUST_LEGIT_TO_AMOUNT", &mustLegitToAmount)
+	proxy, _ = envar.GetURL("PROXY")
+
+	log.Printf("CREATE_ACCOUNT_DELAY: %d\n", createAccountDelay)
+	log.Printf("CREATE_ADDRESS_DELAY: %d\n", createAddressDelay)
+	log.Printf("ON_ERROR_DELAY: %d\n", onErrorDelay)
 	log.Printf("MUST_LEGIT_TO_AMOUNT: %v\n", mustLegitToAmount)
-	proxyEnv := os.Getenv("PROXY")
-	if proxyEnv != "" {
-		proxyURLParsed, err := url.Parse(proxyEnv)
-		if err == nil {
-			proxy = proxyURLParsed
-			log.Printf("PROXY: %s\n", proxyEnv)
-		}
-	}
+	log.Printf("PROXY: %s\n", proxy.String())
 
 	for {
 		client := &http.Client{}
